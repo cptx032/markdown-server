@@ -1,13 +1,15 @@
 from bottle import route,run,template,static_file
 from markdown_converter import MarkdownConverter
 from env import *
+import posixpath
 
 converter = MarkdownConverter()
 
 @route('/<resource>')
 def gfmize(resource):
-
-    html_file_name = converter.convert(resource)
+    html_file_name = markdown_root + resource
+    if (posixpath.splitext(resource)[1] == '.md'):
+        html_file_name = converter.convert(resource)
     return static_file(html_file_name, root=ms_root)
 
 def main():
